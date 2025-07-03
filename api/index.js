@@ -1,6 +1,7 @@
 export default async function handler(req, res) {
   const city = 'Brasilia';
-  const apiKey = process.env.WEATHER_API_KEY;console.log("DEBUG API KEY:", apiKey);
+  const apiKey = process.env.WEATHER_API_KEY;
+  console.log("DEBUG API KEY:", apiKey);
 
   // ✅ DEBUG: Überprüfe, ob die Umgebungsvariable gesetzt ist
   if (!apiKey) {
