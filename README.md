@@ -1,2 +1,3 @@
 # weatherapi-vercel
-Wetterproxy für Twitch-Bot
+Wetterproxy für Cloudbot
+  - Standort Brasilia, Celsius 
