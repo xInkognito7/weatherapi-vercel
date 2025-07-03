@@ -2,7 +2,6 @@ export default async function handler(req, res) {
   const city = 'Brasilia';
   const apiKey = process.env.WEATHER_API_KEY;
 
-  // API-Key Check
   if (!apiKey) {
     return res.status(500).send("FEHLER: API-Key nicht gesetzt");
   }
@@ -49,12 +48,10 @@ export default async function handler(req, res) {
     };
 
     const emoji = emojiMap[condition] || '';
-    
-    const output = `${city}: ${condition} ${emoji}\nAktuell: ${temp}°C\nHeute: Max ${tempMax}°C / Min ${tempMin}°C`;
+    const output = `🌍 ${city}: ${condition} ${emoji} | Aktuell: ${temp}°C | Max: ${tempMax}°C / Min: ${tempMin}°C`;
 
     res.setHeader('Content-Type', 'text/plain');
     res.status(200).send(output);
-    
   } catch (error) {
     res.status(500).send(`Fehler: ${error.message}`);
   }
