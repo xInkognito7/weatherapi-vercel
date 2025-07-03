@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&lang=de&days=1`);
+    const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${encodeURIComponent(city)}&lang=de&days=1`);
     if (!response.ok) {
       throw new Error(`Weather API error: ${response.status}`);
     }
@@ -47,7 +47,18 @@ export default async function handler(req, res) {
       'Keine Angabe': '❓'
     };
 
-    const emoji = emojiMap[condition] || '';
+    // 🔍 Intelligenter Emoji-Match (Teilstring-Vergleich)
+    let emoji = '';
+    for (const [key, symbol] of Object.entries(emojiMap)) {
+      if (condition.toLowerCase().includes(key.toLowerCase())) {
+        emoji = symbol;
+        break;
+      }
+    }
+
+    // Fallback, falls nichts passt
+    if (!emoji) emoji = '🌡️';
+
     const output = `🌍  ${city}: ${condition} ${emoji} | Temperatur: ${temp}°C | Max: ${tempMax}°C / Min: ${tempMin}°C`;
 
     res.setHeader('Content-Type', 'text/plain');
