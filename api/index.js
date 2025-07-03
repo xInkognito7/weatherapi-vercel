@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const city = 'Oslo';
+  const city = 'Brasilia';
   const apiKey = process.env.WEATHER_API_KEY;
 
   if (!apiKey) {
@@ -17,12 +17,13 @@ export default async function handler(req, res) {
     const temp = data.current.temp_c;
     const tempMax = data.forecast.forecastday[0].day.maxtemp_c;
     const tempMin = data.forecast.forecastday[0].day.mintemp_c;
+    const updated = data.current.last_updated;
 
     const emojiMap = {
       'Sonnig': '☀️',
       'Heiter': '🌤️',
       'Klar': '🌕',
-      'Leicht bewölkt': '⛅',
+      'Teilweise bewölkt': '⛅',
       'Bewölkt': '☁️',
       'Stark bewölkt': '☁️',
       'Bedeckt': '☁️',
@@ -48,7 +49,7 @@ export default async function handler(req, res) {
     };
 
     const emoji = emojiMap[condition] || '';
-    const output = `🌍  ${city}: ${condition} ${emoji} | Temperatur: ${temp}°C | Max: ${tempMax}°C / Min: ${tempMin}°C`;
+    const output = `🌍  ${city}: ${condition} ${emoji} | Temperatur: ${temp}°C | Max: ${tempMax}°C / Min: ${tempMin}°C | ⏱️ Aktualisiert: ${updated}`;
 
     res.setHeader('Content-Type', 'text/plain');
     res.status(200).send(output);
