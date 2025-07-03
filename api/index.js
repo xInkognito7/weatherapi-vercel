@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const city = 'Erfurt';
+  const city = 'Phoenix';
   const apiKey = process.env.WEATHER_API_KEY;
 
   if (!apiKey) {
