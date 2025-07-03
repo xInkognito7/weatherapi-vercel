@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const city = 'Oslo';
+  const city = 'Erfurt';
   const apiKey = process.env.WEATHER_API_KEY;
 
   if (!apiKey) {
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
     // Fallback, falls nichts passt
     if (!emoji) emoji = '🌡️';
 
-    const output = `🌍  ${city}: ${condition} ${emoji} | Temperatur: ${temp}°C | Max: ${tempMax}°C / Min: ${tempMin}°C`;
+    const output = `🌍  ${city}: Temperatur: ${temp}°C | ${condition} ${emoji} | Max: ${tempMax}°C / Min: ${tempMin}°C`;
 
     res.setHeader('Content-Type', 'text/plain');
     res.status(200).send(output);
