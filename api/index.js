@@ -22,7 +22,7 @@ export default async function handler(req, res) {
       'Sonnig': '☀️',
       'Heiter': '🌤️',
       'Klar': '🌕',
-      'Teilweise bewölkt': '⛅',
+      'Leicht bewölkt': '⛅',
       'Bewölkt': '☁️',
       'Stark bewölkt': '☁️',
       'Bedeckt': '☁️',
