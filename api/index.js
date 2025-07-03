@@ -2,6 +2,11 @@ export default async function handler(req, res) {
   const city = 'Brasilia';
   const apiKey = process.env.WEATHER_API_KEY;
 
+  // ✅ DEBUG: Überprüfe, ob die Umgebungsvariable gesetzt ist
+  if (!apiKey) {
+    return res.status(500).send("FEHLER: API-Key nicht gesetzt");
+  }
+
   try {
     const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&lang=de`);
     if (!response.ok) {
@@ -12,7 +17,6 @@ export default async function handler(req, res) {
     const condition = data.current.condition.text;
     const temp = data.current.temp_c;
 
-    // Wetterzustände → Emoji-Zuordnung (deutsche Begriffe!)
     const emojiMap = {
       'Sonnig': '☀️',
       'Heiter': '🌤️',
