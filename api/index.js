@@ -48,7 +48,7 @@ export default async function handler(req, res) {
     };
 
     const emoji = emojiMap[condition] || '';
-    const output = `🌍 ${city}: ${condition} ${emoji} | Aktuell: ${temp}°C | Max: ${tempMax}°C / Min: ${tempMin}°C`;
+    const output = `🌍  ${city}: ${condition} ${emoji} | Temperatur: ${temp}°C | Max: ${tempMax}°C / Min: ${tempMin}°C`;
 
     res.setHeader('Content-Type', 'text/plain');
     res.status(200).send(output);
