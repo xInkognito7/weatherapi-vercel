@@ -1,15 +1,14 @@
 export default async function handler(req, res) {
   const city = 'Brasilia';
   const apiKey = process.env.WEATHER_API_KEY;
-  console.log("DEBUG API KEY:", apiKey);
 
-  // ✅ DEBUG: Überprüfe, ob die Umgebungsvariable gesetzt ist
+  // API-Key Check
   if (!apiKey) {
     return res.status(500).send("FEHLER: API-Key nicht gesetzt");
   }
 
   try {
-    const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&lang=de`);
+    const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${city}&lang=de&days=1`);
     if (!response.ok) {
       throw new Error(`Weather API error: ${response.status}`);
     }
@@ -17,6 +16,8 @@ export default async function handler(req, res) {
     const data = await response.json();
     const condition = data.current.condition.text;
     const temp = data.current.temp_c;
+    const tempMax = data.forecast.forecastday[0].day.maxtemp_c;
+    const tempMin = data.forecast.forecastday[0].day.mintemp_c;
 
     const emojiMap = {
       'Sonnig': '☀️',
@@ -48,8 +49,12 @@ export default async function handler(req, res) {
     };
 
     const emoji = emojiMap[condition] || '';
+    
+    const output = `${city}: ${condition} ${emoji}\nAktuell: ${temp}°C\nHeute: Max ${tempMax}°C / Min ${tempMin}°C`;
+
     res.setHeader('Content-Type', 'text/plain');
-    res.status(200).send(`${condition}, ${temp}°C ${emoji}`);
+    res.status(200).send(output);
+    
   } catch (error) {
     res.status(500).send(`Fehler: ${error.message}`);
   }
