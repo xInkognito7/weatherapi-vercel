@@ -1,23 +1,51 @@
-import fetch from 'node-fetch';
-
 export default async function handler(req, res) {
-  const apiKey = process.env.WEATHER_KEY;
   const city = 'Brasilia';
+  const apiKey = process.env.WEATHER_API_KEY;
 
   try {
-    const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${encodeURIComponent(city)}&lang=de`);
-    const data = await response.json();
-
-    if (data.error) {
-      return res.status(500).send('Fehler bei Wetterdaten');
+    const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}&lang=de`);
+    if (!response.ok) {
+      throw new Error(`Weather API error: ${response.status}`);
     }
 
-    const temp = data.current.temp_c;
+    const data = await response.json();
     const condition = data.current.condition.text;
-    
-    res.setHeader('Cache-Control', 's-maxage=60');
-    res.send(`${condition}, ${Math.round(temp)}°C`);
-  } catch (err) {
-    res.status(500).send('Fehler im Proxy');
+    const temp = data.current.temp_c;
+
+    // Wetterzustände → Emoji-Zuordnung (deutsche Begriffe!)
+    const emojiMap = {
+      'Sonnig': '☀️',
+      'Heiter': '🌤️',
+      'Klar': '🌕',
+      'Teilweise bewölkt': '⛅',
+      'Bewölkt': '☁️',
+      'Stark bewölkt': '☁️',
+      'Bedeckt': '☁️',
+      'Leichter Regen': '🌦️',
+      'Mäßiger Regen': '🌧️',
+      'Starker Regen': '🌧️',
+      'Regenschauer': '🌦️',
+      'Stellenweise Regen': '🌦️',
+      'Gewitter': '⛈️',
+      'Leichter Schneefall': '🌨️',
+      'Mäßiger Schneefall': '🌨️',
+      'Starker Schneefall': '❄️',
+      'Schneeregen': '🌨️',
+      'Schnee': '❄️',
+      'Nebel': '🌫️',
+      'Gefrierender Nebel': '🌫️',
+      'Stellenweise Nieselregen': '🌧️',
+      'Stellenweise Schnee': '🌨️',
+      'Unwetter': '🌪️',
+      'Gefrierender Regen': '🌧️❄️',
+      'Eisregen': '🌧️❄️',
+      'Keine Angabe': '❓'
+    };
+
+    const emoji = emojiMap[condition] || '';
+    res.setHeader('Content-Type', 'text/plain');
+    res.status(200).send(`${condition}, ${temp}°C ${emoji}`);
+  } catch (error) {
+    res.status(500).send(`Fehler: ${error.message}`);
   }
 }
