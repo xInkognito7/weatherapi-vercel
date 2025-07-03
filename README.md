@@ -1,3 +1,4 @@
 # weatherapi-vercel
 Wetterproxy für Cloudbot
-  - Standort Brasilia, Celsius 
+  - Standort Brasilia
+  - Celsius
